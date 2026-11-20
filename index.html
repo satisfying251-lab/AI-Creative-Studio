@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090d18"><meta name="description" content="AI Creative Studio - image and video generation hub">
+<link rel="manifest" href="./manifest.webmanifest"><title>AI Creative Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#090d18;--panel:#111a2b;--panel2:#17243a;--line:#26344d;--txt:#f3f6ff;--muted:#9aabc6;--a:#8b7cff;--b:#3bd6c6;--warn:#ffca78}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1000px 500px at 80% -10%,#27335c 0%,transparent 55%),var(--bg);color:var(--txt);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:18px 16px 12px;position:sticky;top:0;background:#090d18eF;backdrop-filter:blur(14px);z-index:5;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;font-size:22px;font-weight:900;color:#07101c}.brand h1{font-size:18px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+.wrap{max-width:900px;margin:auto;padding:16px}.hero{padding:18px;border:1px solid #3b4770;border-radius:22px;background:linear-gradient(130deg,#1b2340,#102b35);margin-bottom:16px}.hero h2{font-size:23px;margin:0 0 6px}.hero p{margin:0;color:#c4d1e8;line-height:1.5}
+.tabs{display:flex;gap:8px;overflow:auto;margin:0 0 14px}.tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:11px 15px;border-radius:12px;white-space:nowrap;font-weight:700}.tab.active{background:#29264c;border-color:var(--a);color:white}
+.panel{background:linear-gradient(180deg,#131e31,#101827);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}.panel h3{margin:0 0 14px;font-size:17px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label{font-size:12px;color:#bdcbe2;font-weight:700}.field input,.field select,.field textarea{width:100%;background:#0b1321;border:1px solid #33435e;border-radius:11px;color:white;padding:12px;font:inherit;min-width:0}.field textarea{min-height:108px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;background:linear-gradient(120deg,var(--a),#5d9bff);color:#fff;cursor:pointer}.btn.secondary{background:#263650;border:1px solid #3b4e6c}.btn.green{background:linear-gradient(120deg,#0c9c88,#39c8ad)}.btn:disabled{opacity:.45;cursor:not-allowed}.hint{font-size:12px;color:var(--muted);line-height:1.5}.status{margin-top:12px;padding:11px 12px;background:#0b1422;border:1px solid var(--line);border-radius:11px;color:#cbd7ea;font-size:13px;white-space:pre-wrap}.status.warn{border-color:#785b30;color:#ffe0a9}.status.ok{border-color:#246a5d;color:#aaf2dc}
+.preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-top:14px}.asset{background:#0b1321;border:1px solid var(--line);border-radius:13px;overflow:hidden}.asset img,.asset video{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#070b12}.asset .meta{padding:9px;font-size:11px;color:var(--muted);word-break:break-word}.asset a{color:#bcb5ff}
+.hidden{display:none!important}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{font-size:11px;padding:5px 9px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}footer{padding:18px;text-align:center;color:#74839e;font-size:11px}
+@media(max-width:580px){.grid{grid-template-columns:1fr}.wrap{padding:12px}.hero h2{font-size:20px}}
+</style></head>
+<body>
+<header><div class="brand"><div class="logo">✦</div><div><h1>AI Creative Studio</h1><p>Image & Video Lab · Web + Android</p></div><button class="btn secondary" style="margin-left:auto;padding:9px 12px" id="settingsBtn">⚙</button></div></header>
+<main class="wrap">
+<section class="hero"><h2>Create beyond imagination.</h2><p>Satu studio untuk membuat gambar dan video AI. Pilih mesin yang tersedia, tulis prompt, lalu generate. Ketersediaan gratis dan batas model ditampilkan dengan jujur.</p></section>
+<nav class="tabs"><button class="tab active" data-tab="image">🖼 Gambar</button><button class="tab" data-tab="video">🎬 Video</button><button class="tab" data-tab="gallery">▦ Galeri</button></nav>
+<section id="image" class="page">
+<div class="panel"><div class="topline"><h3>Text to Image</h3><span class="pill">Free experimental route</span></div>
+<div class="field"><label>Prompt gambar</label><textarea id="iprompt" placeholder="Contoh: cinematic editorial photo of a ceramic coffee cup on a wooden table, morning sunlight, natural shadows, premium commercial photography..."></textarea></div>
+<div class="grid"><div class="field"><label>Rasio</label><select id="iratio"><option value="1:1">1:1 Square</option><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Portrait</option><option value="4:3">4:3</option><option value="3:2">3:2</option></select></div><div class="field"><label>Ukuran</label><select id="isize"><option value="512">512 px · lebih ringan</option><option value="768">768 px · eksperimental</option><option value="1024">1024 px · jika tersedia</option></select></div></div>
+<div class="field"><label>Seed (opsional, untuk variasi konsisten)</label><input id="iseed" type="number" placeholder="Random"></div>
+<div class="actions"><button class="btn" id="genImage">Generate Image</button><button class="btn secondary" id="enhanceImage">✨ Rapikan Prompt</button></div>
+<div id="imageStatus" class="status">Mode gratis tanpa API key menggunakan endpoint legacy komunitas. Bisa mengalami antrean, batas IP, perubahan layanan, atau gangguan.</div>
+<div id="imagePreview" class="preview"></div></div>
+<div class="panel"><h3>Prompt Helper</h3><div class="hint">Bantu susun prompt yang lebih jelas. Ini penyusun template lokal, bukan model AI cloud.</div><div class="field"><label>Subjek / produk</label><input id="subject" placeholder="contoh: skincare bottle"></div><div class="field"><label>Gaya visual</label><select id="style"><option>photorealistic commercial photography</option><option>cinematic film still</option><option>minimalist product photography</option><option>editorial lifestyle photography</option><option>fantasy concept art</option><option>anime illustration</option><option>3D stylized render</option></select></div><div class="field"><label>Pencahayaan dan suasana</label><input id="light" placeholder="soft window light, calm premium mood"></div><button class="btn secondary" id="buildPrompt">Susun Prompt</button></div>
+</section>
+<section id="video" class="page hidden">
+<div class="panel"><div class="topline"><h3>Text / Image to Video</h3><span class="pill">API key required</span></div>
+<div class="field"><label>Prompt video</label><textarea id="vprompt" placeholder="Describe subject, action, environment, camera movement, lighting, motion, and visual style..."></textarea></div>
+<div class="grid"><div class="field"><label>Durasi</label><select id="vduration"><option value="4">4 detik</option><option value="5">5 detik</option><option value="6">6 detik</option><option value="8">8 detik</option><option value="10">10 detik</option></select></div><div class="field"><label>Rasio</label><select id="vratio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Portrait</option><option value="1:1">1:1 Square</option></select></div></div>
+<div class="field"><label>Gambar awal (opsional, Image-to-Video)</label><input type="file" id="vimage" accept="image/png,image/jpeg,image/webp"></div>
+<div class="actions"><button class="btn" id="genVideo">Generate Video</button><button class="btn secondary" id="copyVideoPrompt">Salin Prompt Video</button></div>
+<div id="videoStatus" class="status warn">Video AI berkualitas tinggi umumnya membutuhkan GPU cloud dan kuota. Tanpa API key/kuota, aplikasi tidak akan berpura-pura menghasilkan video. Tambahkan Pollinations key yang memiliki akses model video pada Pengaturan, atau gunakan tautan studio resmi.</div>
+<div class="actions" style="margin-top:10px"><a class="btn secondary" href="https://ltx.io/" target="_blank" rel="noopener">Buka LTX Studio</a><a class="btn secondary" href="https://higgsfield.ai/" target="_blank" rel="noopener">Buka Higgsfield</a></div>
+<div id="videoPreview" class="preview"></div></div>
+<div class="panel"><h3>Camera Director</h3><div class="grid"><div class="field"><label>Gerakan kamera</label><select id="camera"><option>slow cinematic dolly-in</option><option>FPV drone fly-through</option><option>smooth orbit around subject</option><option>tracking shot following subject</option><option>slow motion close-up</option><option>handheld documentary movement</option><option>crane shot rising upward</option></select></div><div class="field"><label>Gerakan subjek</label><select id="motion"><option>natural subtle movement</option><option>dynamic fast action</option><option>gentle wind and fabric motion</option><option>walking toward camera</option><option>product rotating slowly</option><option>water and particles flowing naturally</option></select></div></div><button class="btn secondary" id="buildVideoPrompt">Buat Prompt Sinematik</button></div>
+</section>
+<section id="gallery" class="page hidden"><div class="panel"><div class="topline"><h3>Galeri lokal</h3><button class="btn secondary" id="clearGallery">Hapus</button></div><p class="hint">Hasil yang kamu simpan berada di browser/perangkat ini. Unduh media untuk backup.</p><div id="galleryItems" class="preview"></div></div></section>
+<section id="settings" class="page hidden"><div class="panel"><h3>Pengaturan koneksi</h3><div class="status warn">API key disimpan lokal di browser/perangkat. Jangan masukkan key pada HP atau perangkat bersama. Untuk aplikasi publik, API key sebaiknya disimpan di backend milik sendiri.</div><div class="field"><label>Pollinations API key (sk_...) untuk model berbayar/berkuota termasuk video jika tersedia</label><input id="pollKey" type="password" autocomplete="off" placeholder="sk_..."></div><button class="btn" id="saveSettings">Simpan di perangkat</button><button class="btn secondary" id="removeSettings">Hapus key</button><p class="hint">Model video dan biaya berbeda-beda. Aplikasi tidak menjamin ada kuota gratis. Lihat katalog model dan harga resmi sebelum generate.</p><a href="https://gen.pollinations.ai/models" target="_blank" rel="noopener">Lihat katalog model Pollinations</a><br><a href="https://gen.pollinations.ai/docs" target="_blank" rel="noopener">Dokumentasi API</a></div></section>
+</main><footer>AI Creative Studio v1.0 · Tidak berafiliasi dengan LTX, Higgsfield, atau Pollinations.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='acs_pollinations_key_v1', LIB='acs_gallery_v1';
+function showTab(name){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==name));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===name));if(name==='gallery')renderGallery();if(name==='settings')$('pollKey').value=localStorage.getItem(KEY)||'';}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+$('settingsBtn').onclick=()=>showTab('settings');
+function ratioSize(r,base){let [w,h]=r.split(':').map(Number), scale=base/Math.max(w,h);return [Math.round(w*scale/64)*64,Math.round(h*scale/64)*64]}
+function enhance(p){return p.trim()+', carefully composed, clear subject separation, realistic materials and textures, coherent lighting, professional art direction, high visual detail, no text, no watermark, no logo.'}
+$('enhanceImage').onclick=()=>{$('iprompt').value=enhance($('iprompt').value);};
+$('buildPrompt').onclick=()=>{$('iprompt').value=[$('subject').value,$('style').value,$('light').value,'professional composition, realistic material details, clean background, controlled highlights and shadows, commercial-ready visual, no text, no watermark'].filter(Boolean).join(', ');showTab('image')};
+$('buildVideoPrompt').onclick=()=>{$('vprompt').value=[$('vprompt').value,$('motion').value,$('camera').value,'consistent subject identity, physically plausible motion, stable anatomy and geometry, coherent lighting, cinematic composition, no abrupt cuts'].filter(Boolean).join(', ');};
+$('copyVideoPrompt').onclick=async()=>{try{await navigator.clipboard.writeText($('vprompt').value);$('videoStatus').textContent='Prompt video disalin.'}catch(e){$('videoStatus').textContent='Tidak bisa menyalin otomatis. Pilih dan salin teks prompt.'}};
+function getGallery(){try{return JSON.parse(localStorage.getItem(LIB)||'[]')}catch(e){return []}}
+function addGallery(item){let a=getGallery();a.unshift(item);a=a.slice(0,30);localStorage.setItem(LIB,JSON.stringify(a));}
+function renderGallery(){let el=$('galleryItems');el.innerHTML='';getGallery().forEach((x,i)=>{let d=document.createElement('div');d.className='asset';let media=x.type==='video'?document.createElement('video'):document.createElement('img');media.src=x.url;if(x.type==='video')media.controls=true;d.append(media);let m=document.createElement('div');m.className='meta';m.textContent=x.prompt.slice(0,110);let a=document.createElement('a');a.href=x.url;a.download=x.name||('creative-'+i);a.textContent='Unduh';m.append(document.createElement('br'),a);d.append(m);el.append(d)});}
+$('clearGallery').onclick=()=>{if(confirm('Hapus galeri lokal?')){localStorage.removeItem(LIB);renderGallery()}};
+$('saveSettings').onclick=()=>{localStorage.setItem(KEY,$('pollKey').value.trim());alert('Key disimpan lokal pada perangkat ini.')};
+$('removeSettings').onclick=()=>{localStorage.removeItem(KEY);$('pollKey').value='';alert('Key lokal dihapus.')};
+$('genImage').onclick=async()=>{
+ const prompt=$('iprompt').value.trim();if(!prompt){$('imageStatus').textContent='Masukkan prompt terlebih dahulu.';return}
+ const [w,h]=ratioSize($('iratio').value,Number($('isize').value));const seed=$('iseed').value||Math.floor(Math.random()*9999999);
+ const url='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt)+'?width='+w+'&height='+h+'&seed='+seed+'&nologo=true';
+ const st=$('imageStatus'),box=$('imagePreview'),btn=$('genImage');btn.disabled=true;st.textContent='Mengirim permintaan ke layanan gambar komunitas…';st.className='status';
+ const img=new Image();img.alt=prompt;img.onload=()=>{st.textContent='Gambar berhasil diterima. Unduh untuk menyimpan ke galeri perangkat.';st.className='status ok';let card=document.createElement('div');card.className='asset';card.append(img);let meta=document.createElement('div');meta.className='meta';meta.textContent=prompt.slice(0,100);let a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.textContent='Buka / unduh gambar';meta.append(document.createElement('br'),a);card.append(meta);box.prepend(card);addGallery({type:'image',url,prompt,name:'ai-image-'+seed+'.jpg'});btn.disabled=false};
+ img.onerror=()=>{st.textContent='Gagal mengambil gambar. Layanan gratis mungkin sedang dibatasi, berubah endpoint, atau antrean penuh. Coba lagi nanti atau gunakan provider lain.';st.className='status warn';btn.disabled=false};img.src=url;
+};
+$('genVideo').onclick=async()=>{
+ const key=localStorage.getItem(KEY),prompt=$('vprompt').value.trim();if(!prompt){$('videoStatus').textContent='Masukkan prompt video.';return}
+ if(!key){$('videoStatus').textContent='Belum ada Pollinations API key. Pembuatan video tidak tersedia secara gratis tanpa autentikasi pada API resmi saat ini. Buka Pengaturan untuk menambahkan key yang memiliki akses dan saldo/kuota model video, atau gunakan LTX/Higgsfield melalui situs resminya.';showTab('video');return}
+ const st=$('videoStatus'),btn=$('genVideo');btn.disabled=true;st.textContent='Memuat katalog model video…';
+ try{
+  const cat=await fetch('https://gen.pollinations.ai/video/models',{headers:{Authorization:'Bearer '+key}});if(!cat.ok)throw new Error('Katalog model tidak dapat diakses ('+cat.status+'). Periksa API key.');
+  const models=await cat.json();const list=Array.isArray(models)?models:(models.data||models.models||[]);
+  const model=list.find(m=>m.name||m.id);if(!model)throw new Error('Tidak ada model video yang tersedia pada akun/kuota ini.');
+  const modelId=model.name||model.id;const dur=Number($('vduration').value);
+  st.textContent='Mengirim ke model '+modelId+'. Proses video dapat memakan waktu dan menggunakan saldo.';
+  const u='https://gen.pollinations.ai/video/'+encodeURIComponent(prompt)+'?model='+encodeURIComponent(modelId)+'&duration='+dur;
+  const res=await fetch(u,{headers:{Authorization:'Bearer '+key}});if(!res.ok)throw new Error('Generate gagal ('+res.status+'). Periksa model, saldo, batas durasi, atau kuota.');
+  const ct=res.headers.get('content-type')||'';let videoUrl;
+  if(ct.includes('application/json')){const j=await res.json();videoUrl=j.data?.[0]?.url||j.url;if(!videoUrl&&j.data?.[0]?.b64_json){videoUrl='data:video/mp4;base64,'+j.data[0].b64_json}}
+  else{const blob=await res.blob();videoUrl=URL.createObjectURL(blob)}
+  if(!videoUrl)throw new Error('Provider tidak mengembalikan URL atau video base64 yang dikenali.');
+  const v=document.createElement('video');v.src=videoUrl;v.controls=true;v.playsInline=true;v.style.width='100%';v.style.aspectRatio='16/9';v.style.objectFit='contain';
+  $('videoPreview').prepend(v);st.textContent='Video berhasil diterima. Simpan/unduh hasilnya segera.';st.className='status ok';addGallery({type:'video',url:videoUrl,prompt,name:'ai-video.mp4'});
+ }catch(e){st.textContent=e.message+' Video API tidak selalu gratis; periksa harga dan model sebelum mencoba lagi.';st.className='status warn'}finally{btn.disabled=false}
+};
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script></body></html>

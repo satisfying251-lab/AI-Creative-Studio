@@ -1,0 +1,8 @@
+{
+  "appId": "com.satisfying251lab.aicreativestudio",
+  "appName": "AI Creative Studio",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  }
+}

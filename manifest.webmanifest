@@ -1,0 +1,10 @@
+{
+  "name": "AI Creative Studio",
+  "short_name": "Creative Studio",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090d18",
+  "theme_color": "#090d18",
+  "description": "AI image and video generation hub",
+  "icons": []
+}
